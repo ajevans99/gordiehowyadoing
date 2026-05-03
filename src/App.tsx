@@ -3,21 +3,21 @@ import poster from './assets/gordie-poster.png'
 
 const rideStats = [
   { label: 'Start', value: 'Detroit, MI', detail: 'Hart Plaza, riverfront roll-out' },
-  { label: 'Finish', value: 'Windsor, ON', detail: 'Caesar celebration zone' },
+  { label: 'Finish', value: 'Windsor, ON', detail: 'Probably near Caesars?' },
 ]
 
 const expectations = [
-  'Fully supported ride',
-  'Route support & goofy shenanigans',
-  'Mechanical support',
-  'Post-ride party & Caesars',
-  'Great people. Great cause. Great times.',
+  'Deeply unofficial vibes',
+  'BYO water, tools, snacks, common sense',
+  'Probably no one is in charge',
+  'Maybe Caesars if legs still work',
+  'Great people. Questionable plan. Great times.',
 ]
 
 const goofyRules = [
   'Helmet hair encouraged',
   'Bridge vibes mandatory',
-  'Legends ride at party pace',
+  'Legends ride at chaos pace',
   'Caesar mustaches optional',
 ]
 
@@ -273,6 +273,7 @@ function App() {
           <div className="grid gap-5 md:grid-cols-2">
             <article className="rounded-[2rem] border-4 border-black bg-red p-6 text-white shadow-black">
               <p className="text-sm font-black uppercase tracking-[0.3em] text-gold">What to expect</p>
+              <h2 className="mt-3 text-4xl font-black uppercase leading-none">Chaos mode.</h2>
               <ul className="mt-5 space-y-4">
                 {expectations.map((item) => (
                   <li className="flex gap-3 text-lg font-black uppercase leading-tight" key={item}>
@@ -290,7 +291,7 @@ function App() {
                 Be like Gordie.
               </h2>
               <p className="relative mt-4 text-lg font-black uppercase leading-tight">
-                Register, volunteer, cheer, donate, or just show up with maximum silly enthusiasm.
+                Drop your name, bring your bike, and prepare for a beautifully unorganized situation.
               </p>
               <form className="relative mt-6 space-y-3" onSubmit={handleRegistration}>
                 <label className="block">
@@ -323,7 +324,7 @@ function App() {
               {registration && (
                 <p className="relative mt-4 rounded-2xl border-4 border-black bg-cream px-4 py-3 text-base font-black uppercase leading-tight text-black">
                   {registration.name}, you are unofficially-officially ready to roll. We will nudge{' '}
-                  {registration.email} when registration opens.
+                  {registration.email} when the chaos starts.
                 </p>
               )}
             </article>
