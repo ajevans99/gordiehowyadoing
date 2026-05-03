@@ -392,6 +392,9 @@ function App() {
             sense, and a way home. Most likely return plan: ride back. Do not assume buses can take
             your bike. We are not your dad.
           </p>
+          <p className="mt-4 inline-block rotate-[-1deg] bg-gold px-4 py-3 text-xl font-black uppercase leading-tight text-black">
+            When? Idk. When the bridge opens, I guess.
+          </p>
         </div>
       </section>
 
