@@ -21,6 +21,8 @@ const goofyRules = [
   'Caesar mustaches optional',
 ]
 
+const registrationEndpoint = 'https://ghyd-register-win-777364.azurewebsites.net/api/register'
+
 function DetroitSkyline({ className = '' }: { className?: string }) {
   return (
     <div className={`detroit-skyline ${className}`.trim()} aria-hidden="true">
@@ -88,6 +90,10 @@ function App() {
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
   const [registration, setRegistration] = useState<{ email: string; name: string } | null>(null)
+  const [registrationError, setRegistrationError] = useState('')
+  const [registrationStatus, setRegistrationStatus] = useState<
+    'error' | 'idle' | 'submitting' | 'success'
+  >('idle')
   const [showJumpScare, setShowJumpScare] = useState(false)
   const [jumpScareKey, setJumpScareKey] = useState(0)
   const jumpScareTimer = useRef<number | null>(null)
@@ -110,23 +116,58 @@ function App() {
     }
   }, [])
 
-  function handleRegistration(event: FormEvent<HTMLFormElement>) {
+  async function handleRegistration(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
     const name = formData.get('name')
     const email = formData.get('email')
+    const website = formData.get('website')
 
     if (
       typeof name !== 'string' ||
       name.trim().length === 0 ||
       typeof email !== 'string' ||
-      email.trim().length === 0
+      email.trim().length === 0 ||
+      typeof website !== 'string'
     ) {
       throw new Error('Registration form submitted without a name or email.')
     }
 
-    setRegistration({ email: email.trim(), name: name.trim() })
+    const nextRegistration = { email: email.trim(), name: name.trim() }
+
+    setRegistrationError('')
+    setRegistrationStatus('submitting')
+
+    try {
+      const response = await fetch(registrationEndpoint, {
+        body: JSON.stringify({ ...nextRegistration, website }),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+      })
+
+      if (!response.ok) {
+        let errorMessage = 'The chaos list is not accepting names right now.'
+
+        try {
+          const errorBody = (await response.json()) as { error?: string }
+          errorMessage = errorBody.error || errorMessage
+        } catch {
+          errorMessage = await response.text()
+        }
+
+        throw new Error(errorMessage)
+      }
+    } catch (error) {
+      setRegistrationError(
+        error instanceof Error ? error.message : 'The chaos list is not accepting names right now.',
+      )
+      setRegistrationStatus('error')
+      return
+    }
+
+    setRegistration(nextRegistration)
+    setRegistrationStatus('success')
     event.currentTarget.reset()
 
     if (jumpScareTimer.current !== null) {
@@ -314,13 +355,23 @@ function App() {
                     type="email"
                   />
                 </label>
+                <label className="hidden">
+                  <span>Website</span>
+                  <input autoComplete="off" name="website" tabIndex={-1} type="text" />
+                </label>
                 <button
-                  className="pedal-cta inline-flex w-full rotate-[-1deg] items-center justify-center rounded-xl bg-black px-5 py-3 text-lg font-black uppercase tracking-wide text-white transition hover:bg-red focus:outline-none focus:ring-4 focus:ring-red"
+                  className="pedal-cta inline-flex w-full rotate-[-1deg] items-center justify-center rounded-xl bg-black px-5 py-3 text-lg font-black uppercase tracking-wide text-white transition hover:bg-red focus:outline-none focus:ring-4 focus:ring-red disabled:cursor-not-allowed disabled:opacity-70"
+                  disabled={registrationStatus === 'submitting'}
                   type="submit"
                 >
-                  Get me on the list
+                  {registrationStatus === 'submitting' ? 'Adding chaos...' : 'Get me on the list'}
                 </button>
               </form>
+              {registrationStatus === 'error' && (
+                <p className="relative mt-4 rounded-2xl border-4 border-black bg-red px-4 py-3 text-base font-black uppercase leading-tight text-white">
+                  {registrationError}
+                </p>
+              )}
               {registration && (
                 <p className="relative mt-4 rounded-2xl border-4 border-black bg-cream px-4 py-3 text-base font-black uppercase leading-tight text-black">
                   {registration.name}, you are unofficially-officially ready to roll. We will nudge{' '}
@@ -329,6 +380,18 @@ function App() {
               )}
             </article>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-black px-5 py-8 text-cream sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl rounded-[2rem] border-4 border-red bg-cream p-6 text-black shadow-red">
+          <p className="text-sm font-black uppercase tracking-[0.3em] text-red">Blunt logistics</p>
+          <h2 className="mt-3 text-4xl font-black uppercase leading-none">You need a return plan.</h2>
+          <p className="mt-4 text-lg font-black uppercase leading-tight">
+            This is deeply unofficial. Bring ID/passport, water, tools, snacks, lights, common
+            sense, and a way home. Most likely return plan: ride back. Do not assume buses can take
+            your bike. We are not your dad.
+          </p>
         </div>
       </section>
 
