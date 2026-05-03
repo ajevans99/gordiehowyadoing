@@ -465,10 +465,15 @@
     mix-blend-mode: screen;
   }
 
-  .marquee span {
-    min-width: 100%;
-    padding-right: 2rem;
+  .marquee-track {
+    display: flex;
+    width: max-content;
     animation: marquee 22s linear infinite;
+  }
+
+  .marquee-track span {
+    flex: 0 0 auto;
+    padding-right: clamp(2.5rem, 10vw, 7rem);
   }
 
   .pedal-cta {

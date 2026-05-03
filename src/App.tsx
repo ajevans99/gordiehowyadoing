@@ -331,14 +331,18 @@ function App() {
         </div>
       </section>
 
-      <section className="bg-red px-5 py-5 sm:px-8 lg:px-12">
-        <div className="marquee mx-auto flex max-w-7xl overflow-hidden whitespace-nowrap text-2xl font-black uppercase italic tracking-wide text-white">
-          <span>
-            Strong on ice. Stronger together. Ring bells. Wear red. High-five safely. Be absurdly nice.
-          </span>
-          <span aria-hidden="true">
-            Strong on ice. Stronger together. Ring bells. Wear red. High-five safely. Be absurdly nice.
-          </span>
+      <section className="bg-red py-5">
+        <div className="marquee mx-auto max-w-7xl overflow-hidden whitespace-nowrap text-xl font-black uppercase italic tracking-wide text-white sm:text-2xl">
+          <div className="marquee-track">
+            <span>
+              Strong on ice. Stronger together. Ring bells. Wear red. High-five safely. Be absurdly
+              nice.
+            </span>
+            <span aria-hidden="true">
+              Strong on ice. Stronger together. Ring bells. Wear red. High-five safely. Be absurdly
+              nice.
+            </span>
+          </div>
         </div>
       </section>
       </main>
